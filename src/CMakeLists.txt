@@ -194,9 +194,6 @@ add_feature_info(SSHAgent WITH_XC_SSHAGENT "SSH agent integration compatible wit
 add_feature_info(keepassxc-browser WITH_XC_BROWSER "KeePassXC browser support with keepassxc-browser")
 
 add_subdirectory(http)
-if(WITH_XC_HTTP)
-    set(keepasshttp_LIB keepasshttp qhttp Qt5::Network)
-endif()
 
 set(BROWSER_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/browser)
 add_subdirectory(browser)
@@ -241,15 +238,13 @@ endif()
 add_library(autotype STATIC ${autotype_SOURCES})
 target_link_libraries(autotype Qt5::Core Qt5::Widgets)
 
-set(autotype_LIB autotype)
-
 add_library(keepassx_core STATIC ${keepassx_SOURCES})
 
 set_target_properties(keepassx_core PROPERTIES COMPILE_DEFINITIONS KEEPASSX_BUILDING_CORE)
 target_link_libraries(keepassx_core
-                      ${keepasshttp_LIB}
+                      keepasshttp
                       ${keepassxcbrowser_LIB}
-                      ${autotype_LIB}
+                      autotype
                       ${sshagent_LIB}
                       ${YUBIKEY_LIBRARIES}
                       ${ZXCVBN_LIBRARIES}
