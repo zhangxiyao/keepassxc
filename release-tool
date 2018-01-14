@@ -580,9 +580,8 @@ build() {
 
     if $BUILD_NIGHTLY; then
         TAG_NAME="HEAD"
-        logInfo "Checking out and updating develop branch..."
-        git checkout develop
-        git pull origin develop
+        local branch=`git rev-parse --abbrev-ref HEAD`
+        logInfo "Using current branch ${branch} to build..."
         local git_rev=`git rev-parse --short HEAD`
         RELEASE_NAME="${RELEASE_NAME}_${git_rev}"
     else
