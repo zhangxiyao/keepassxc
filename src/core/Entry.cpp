@@ -29,6 +29,8 @@
 
 const int Entry::DefaultIconNumber = 0;
 const int Entry::ResolveMaximumDepth = 10;
+const QString Entry::AutoTypeSequenceUsername = "{USERNAME}{ENTER}";
+const QString Entry::AutoTypeSequencePassword = "{PASSWORD}{ENTER}";
 
 
 Entry::Entry()
@@ -231,7 +233,7 @@ QString Entry::effectiveAutoTypeSequence() const
     if (!parent) {
         return QString();
     }
-    
+
     QString sequence = parent->effectiveAutoTypeSequence();
     if (sequence.isEmpty()) {
         return QString();
@@ -239,6 +241,15 @@ QString Entry::effectiveAutoTypeSequence() const
 
     if (!m_data.defaultAutoTypeSequence.isEmpty()) {
         return m_data.defaultAutoTypeSequence;
+    }
+
+    if (sequence == Group::RootAutoTypeSequence && (!username().isEmpty() || !password().isEmpty())) {
+        if (username().isEmpty()) {
+            return AutoTypeSequencePassword;
+        } else if (password().isEmpty()) {
+            return AutoTypeSequenceUsername;
+        }
+        return Group::RootAutoTypeSequence;
     }
 
     return sequence;
